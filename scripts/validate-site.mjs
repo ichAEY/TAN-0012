@@ -91,8 +91,8 @@ if (publishedUrls.some((url) => url.includes("instagram.com") || url.includes("i
   fail("Instagram links are forbidden anywhere in the published site data");
 }
 
-if (site.master.name && bookingMode(site) === "contact" && contactOptions(site).length === 0) {
-  fail("published master without direct booking must have at least a phone/contact option");
+if (site.master.name && bookingMode(site) === "unavailable" && contactOptions(site).length !== 0) {
+  fail("unavailable booking mode must not expose invalid contact options");
 }
 
 categoryMode(site);
