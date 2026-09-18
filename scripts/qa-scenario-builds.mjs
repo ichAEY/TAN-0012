@@ -174,7 +174,7 @@ const scenarios = [
       assert.match(html, />HY</);
       assert.match(html, />RU</);
       assert.match(html, />EN</);
-      assert.match(html, /HY:Портфолио/);
+      assert.match(html, /HY:Услуги и цены/);
       assert.doesNotMatch(html, /role="tablist"/);
       assert.match(html, /https:\/\/t\.me\/tanem_test/);
       assert.match(html, /href="#booking-options"/);
