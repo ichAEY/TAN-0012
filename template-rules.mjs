@@ -79,7 +79,9 @@ export function categoryMode(site) {
 }
 
 export function bookingMode(site) {
-  return hasUsableLink(site?.links?.bookingUrl) ? "direct" : "contact";
+  if (hasUsableLink(site?.links?.bookingUrl)) return "direct";
+  if (contactOptions(site).length > 0) return "contact";
+  return "unavailable";
 }
 
 export function serviceBookingUrl(service, site) {
