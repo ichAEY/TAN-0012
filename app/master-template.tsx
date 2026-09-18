@@ -223,15 +223,15 @@ export default function MasterTemplate() {
     if (locale === "en" && baseEnglish[value]) return baseEnglish[value];
     return value;
   };
-  const bookingHref = siteBookingMode === "direct" ? bookingUrl : "#booking-options";
+  const bookingHref = siteBookingMode === "direct" ? bookingUrl : siteBookingMode === "contact" ? "#booking-options" : "#mobile-location";
   const handleBookingClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    if (siteBookingMode === "direct") return;
+    if (siteBookingMode === "direct" || siteBookingMode === "unavailable") return;
     event.preventDefault();
     setBookingOpen(true);
   };
-  const serviceHref = (service: Service) => serviceBookingUrl(service, site) || "#booking-options";
+  const serviceHref = (service: Service) => serviceBookingUrl(service, site) || (siteBookingMode === "contact" ? "#booking-options" : "#mobile-location");
   const handleServiceClick = (event: ReactMouseEvent<HTMLAnchorElement>, service: Service) => {
-    if (serviceBookingUrl(service, site)) return;
+    if (serviceBookingUrl(service, site) || siteBookingMode === "unavailable") return;
     event.preventDefault();
     setBookingOpen(true);
   };
@@ -1118,7 +1118,7 @@ export default function MasterTemplate() {
           </div>
           <div className="mct-hero-bottom">
             <div className="mct-hero-actions">
-              <a className="mct-main-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}>{translatedText("Записаться онлайн")}&nbsp; →</a>
+              {siteBookingMode !== "unavailable" ? <a className="mct-main-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}>{translatedText("Записаться онлайн")}&nbsp; →</a> : null}
               {galleryWorks.length > 0 ? <a className="mct-quiet-link" href="#mobile-portfolio">{translatedText("Смотреть работы")} ↓</a> : null}
             </div>
             <div className={`mct-stats${siteExperienceMode === "unknown" ? " is-two-stats" : ""}`} aria-label="Опыт и рейтинг мастера">
@@ -1530,14 +1530,19 @@ export default function MasterTemplate() {
                 <h3>{translatedText("Запишитесь онлайн")}<br /><em>{translatedText("или свяжитесь любым удобным способом")}</em></h3>
                 <p>{translatedText("Выберите свободное время онлайн. Если нужно уточнить услугу, свяжитесь с мастером напрямую.")}</p>
               </>
-            ) : (
+            ) : siteBookingMode === "contact" ? (
               <>
                 <h3>{translatedText("Свяжитесь удобным способом")}</h3>
                 <p>{translatedText("Позвоните или напишите мастеру, чтобы согласовать услугу и время.")}</p>
               </>
+            ) : (
+              <>
+                <h3>{translatedText("Локация")}</h3>
+                <p>{translatedText("Адрес и маршрут")}</p>
+              </>
             )}
             <div className="mct-visit-actions">
-              <a className="mct-final-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}><span>{siteBookingMode === "direct" ? translatedText("Выбрать время онлайн") : translatedText("Записаться онлайн")}</span><i className="mct-link-arrow" aria-hidden="true" /></a>
+              {siteBookingMode !== "unavailable" ? <a className="mct-final-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}><span>{siteBookingMode === "direct" ? translatedText("Выбрать время онлайн") : translatedText("Записаться онлайн")}</span><i className="mct-link-arrow" aria-hidden="true" /></a> : null}
               {siteBookingMode === "direct" && site.template.bookingProvider ? <div className="dct-booking-note" aria-hidden="true"><span>▢</span><small>{translatedText("Запись через")} {site.template.bookingProvider}<br />{translatedText("по предварительной записи")}</small></div> : null}
               <div className="mct-final-contact-grid" aria-label={`Способы связи с ${site.master.instrumental}`}>
                 {bookingContacts.map((item) => (
@@ -1564,13 +1569,15 @@ export default function MasterTemplate() {
       </section>
       <a className="mct-tanem-footer" href="https://tanem.ru/" target="_blank" rel="noopener noreferrer"><span className="tanem-mark">T</span><span className="tanem-credit">{translatedText("Создано в")} <strong>TANEM.ru</strong></span></a>
 
-      <div className={`mct-sticky-wrap${stickyVisible && !galleryOpen && !bookingOpen ? " is-visible" : ""}`} aria-hidden={!stickyVisible || galleryOpen}>
-        <a className="mct-sticky" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick} tabIndex={stickyVisible && !galleryOpen && !bookingOpen ? 0 : -1}>
-          <span className="mct-sticky-icon dct-sticky-mobile-mark">{site.brand.monogram}</span><span className="dct-sticky-live" aria-hidden="true"><i /></span><span className="mct-sticky-copy"><strong>{translatedText("Записаться онлайн")}</strong><small>{siteBookingMode === "direct" ? translatedText("Открыть свободное время") : translatedText("Выберите удобный способ связи")}</small></span><span className="mct-sticky-arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
+      {siteBookingMode !== "unavailable" ? (
+        <div className={`mct-sticky-wrap${stickyVisible && !galleryOpen && !bookingOpen ? " is-visible" : ""}`} aria-hidden={!stickyVisible || galleryOpen}>
+          <a className="mct-sticky" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick} tabIndex={stickyVisible && !galleryOpen && !bookingOpen ? 0 : -1}>
+            <span className="mct-sticky-icon dct-sticky-mobile-mark">{site.brand.monogram}</span><span className="dct-sticky-live" aria-hidden="true"><i /></span><span className="mct-sticky-copy"><strong>{translatedText("Записаться онлайн")}</strong><small>{siteBookingMode === "direct" ? translatedText("Открыть свободное время") : translatedText("Выберите удобный способ связи")}</small></span><span className="mct-sticky-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      ) : null}
 
-      <div className={`mct-book-sheet${bookingOpen ? " is-open" : ""}`} id="booking-options" role="dialog" aria-modal="true" aria-hidden={!bookingOpen} aria-label={translatedText("Как вам удобнее записаться?")} onClick={() => setBookingOpen(false)}>
+      {siteBookingMode === "contact" ? <div className={`mct-book-sheet${bookingOpen ? " is-open" : ""}`} id="booking-options" role="dialog" aria-modal="true" aria-hidden={!bookingOpen} aria-label={translatedText("Как вам удобнее записаться?")} onClick={() => setBookingOpen(false)}>
         <div className="mct-book-panel" onClick={(event) => event.stopPropagation()}>
           <button className="mct-book-close" type="button" onClick={() => setBookingOpen(false)} aria-label={translatedText("Закрыть")}>×</button>
           <p className="mct-section-kicker">{translatedText("Запись и связь")}</p>
@@ -1590,7 +1597,7 @@ export default function MasterTemplate() {
             ))}
           </div>
         </div>
-      </div>
+      </div> : null}
 
       {galleryOpen && galleryWorks.length > 0 && (
         <div className="mct-gallery-overlay" role="dialog" aria-modal="true" aria-label={`Галерея ${site.master.genitive}`}>
