@@ -2,23 +2,31 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 import site from "../site-data.mjs";
+import { bookingMode, categoryMode, specialtyMode } from "../template-rules.mjs";
 
 const html = fs.readFileSync("out/index.html", "utf8");
 
-test("static export builds from the empty template", () => {
+test("client static export is built", () => {
   assert.match(html, /site-root/);
+  assert.match(html, /Наталья Фадеева/);
 });
 
-test("client data is empty in the base template", () => {
-  assert.equal(site.master.name, "");
-  assert.equal(site.location.city, "");
+test("verified client identity and template mode are populated", () => {
+  assert.equal(site.master.name, "Наталья Фадеева");
+  assert.equal(specialtyMode(site), "nails");
+  assert.equal(site.services.groups.length, 2);
   assert.equal(site.contacts.phoneDisplay, "");
-  assert.equal(site.reviews.length, 0);
-  assert.equal(site.images.gallery.length, 0);
-  assert.equal(Object.values(site.services).flat().length, 0);
 });
 
-test("the clean template uses one canonical stylesheet and runtime", () => {
+test("service category mode is correct", () => {
+  assert.equal(categoryMode(site), "two");
+});
+
+test("booking mode follows verified data", () => {
+  assert.equal(bookingMode(site), "unavailable");
+});
+
+test("canonical stylesheet and runtime are present", () => {
   assert.ok(fs.existsSync("app/template.css"));
   assert.ok(fs.existsSync("public/template-runtime.js"));
 });
