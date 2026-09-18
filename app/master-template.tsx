@@ -1119,7 +1119,7 @@ export default function MasterTemplate() {
           <div className="mct-hero-bottom">
             <div className="mct-hero-actions">
               <a className="mct-main-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}>{translatedText("Записаться онлайн")}&nbsp; →</a>
-              <a className="mct-quiet-link" href="#mobile-portfolio">{translatedText("Смотреть работы")} ↓</a>
+              {galleryWorks.length > 0 ? <a className="mct-quiet-link" href="#mobile-portfolio">{translatedText("Смотреть работы")} ↓</a> : null}
             </div>
             <div className={`mct-stats${siteExperienceMode === "unknown" ? " is-two-stats" : ""}`} aria-label="Опыт и рейтинг мастера">
               {siteExperienceMode === "known" ? <div className="mct-stat"><strong>{site.master.experienceYears}</strong><span>{translatedText("лет опыта")}</span></div> : null}
@@ -1130,6 +1130,7 @@ export default function MasterTemplate() {
         </div>
       </header>
 
+      {galleryWorks.length > 0 ? (
       <section className="mct-section" id="mobile-portfolio">
         <div className="mct-shell mct-reveal">
           <div className="mct-section-head">
@@ -1204,6 +1205,7 @@ export default function MasterTemplate() {
           <button className="mct-gallery-button" type="button" onClick={() => setGalleryOpen(true)}><span>{translatedText("Открыть галерею")}</span><span aria-hidden="true">→</span></button>
         </div>
       </section>
+      ) : null}
 
       <section className="mct-prices mct-reveal" id="mobile-prices">
         <div className="mct-shell">
@@ -1590,7 +1592,7 @@ export default function MasterTemplate() {
         </div>
       </div>
 
-      {galleryOpen && (
+      {galleryOpen && galleryWorks.length > 0 && (
         <div className="mct-gallery-overlay" role="dialog" aria-modal="true" aria-label={`Галерея ${site.master.genitive}`}>
           <div className="mct-gallery-top"><strong>{translatedText("Галерея")}</strong><button className="mct-gallery-close" type="button" onClick={() => setGalleryOpen(false)} aria-label={translatedText("Закрыть галерею")}>×</button></div>
           <div className="mct-gallery-content">
