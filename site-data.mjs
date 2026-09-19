@@ -66,12 +66,23 @@ export default {
   },
   "images": {
     "logo": "",
-    "portrait": `${publicBase}/placeholder.svg`,
-    "about": `${publicBase}/placeholder.svg`,
+    "portrait": `${publicBase}/master.00000.webp`,
+    "portraitDesktop": `${publicBase}/masterpc.00000.webp`,
+    "about": `${publicBase}/master.00000.webp`,
     "favicon": `${publicBase}/favicon-source.png`,
     "heroDecoration": `${publicBase}/assets/template/hair-tools.png`,
     "beforeAfter": [],
-    "gallery": []
+    "gallery": [
+      { "src": `${publicBase}/galery.00001.webp`, "alt": "Работа Натальи — 1" },
+      { "src": `${publicBase}/galery.00002.webp`, "alt": "Работа Натальи — 2" },
+      { "src": `${publicBase}/galery.00003.webp`, "alt": "Работа Натальи — 3" },
+      { "src": `${publicBase}/galery.00004.webp`, "alt": "Работа Натальи — 4" },
+      { "src": `${publicBase}/galery.00005.webp`, "alt": "Работа Натальи — 5" },
+      { "src": `${publicBase}/galery.00006.webp`, "alt": "Работа Натальи — 6" },
+      { "src": `${publicBase}/galery.00007.webp`, "alt": "Работа Натальи — 7" },
+      { "src": `${publicBase}/galery.00008.webp`, "alt": "Работа Натальи — 8" },
+      { "src": `${publicBase}/galery.00009.webp`, "alt": "Работа Натальи — 9" }
+    ]
   },
   "services": {
     "groups": [

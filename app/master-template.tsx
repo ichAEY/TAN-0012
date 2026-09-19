@@ -1089,7 +1089,10 @@ export default function MasterTemplate() {
               <div className="mct-master-tools" aria-hidden="true"><img className="mct-master-hero-image" src={site.images.heroDecoration} alt="" /></div>
             ) : null}
             <figure className="dct-hero-portrait">
-              <img src={site.images.portrait} alt={`${site.master.name} — ${site.master.imageAlt}`} />
+              <picture style={{ display: "block", width: "100%", height: "100%" }}>
+                <source media="(min-width: 768px)" srcSet={site.images.portraitDesktop || site.images.portrait} />
+                <img src={site.images.portrait} alt={`${site.master.name} — ${site.master.imageAlt}`} />
+              </picture>
               <figcaption><span>{site.master.name}</span><small>{translatedText(site.master.heroCaption)}</small></figcaption>
             </figure>
             {siteSpecialtyMode === "nails" ? <div className="mct-palette-stage" aria-hidden="true">
