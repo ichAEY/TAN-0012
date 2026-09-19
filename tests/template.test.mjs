@@ -15,17 +15,8 @@ const html = fs.readFileSync("out/index.html", "utf8");
 const css = fs.readFileSync("app/template.css", "utf8");
 const component = fs.readFileSync("app/master-template.tsx", "utf8");
 
-test("static export builds from the empty template", () => {
+test("static export builds for the production site", () => {
   assert.match(html, /site-root/);
-});
-
-test("client data is empty in the base template", () => {
-  assert.equal(site.master.name, "");
-  assert.equal(site.location.city, "");
-  assert.equal(site.contacts.phoneDisplay, "");
-  assert.equal(site.reviews.length, 0);
-  assert.equal(site.images.gallery.length, 0);
-  assert.equal(Object.values(site.services).flat().length, 0);
 });
 
 test("the clean template uses one canonical stylesheet and runtime", () => {
@@ -148,4 +139,19 @@ test("final CSS locks Nails to mobile and many categories to one horizontal ribb
   assert.match(css, /@media \(min-width: 768px\)[\s\S]*?\.mct-palette-stage[\s\S]*?display: none !important/);
   assert.match(css, /\.mct-tabs-ribbon-wrap\.is-many \.mct-tabs-track[\s\S]*?display: flex !important[\s\S]*?flex-wrap: nowrap !important/);
   assert.match(css, /\.dct-top-actions \.mct-lang-switch\.is-desktop button[\s\S]*?font-size: 20px !important/);
+});
+
+test("TAN-0012 production data is wired through the template", () => {
+  assert.equal(site.master.name, "Наталья");
+  assert.equal(site.brand.name, "Наталья Фадеева");
+  assert.equal(site.template.specialty, "nails");
+  assert.equal(site.master.experienceYears, "14");
+  assert.equal(site.contacts.phoneHref, "tel:+79251631065");
+  assert.equal(site.links.bookingUrl, "");
+  assert.equal(categoryMode(site), "two");
+  assert.equal(site.services.groups[0].services.length, 4);
+  assert.equal(site.services.groups[1].services.length, 2);
+  assert.equal(site.images.gallery.length, 0);
+  assert.match(html, /эксперт по маникюру и педикюру/);
+  assert.match(html, /tel:\+79251631065/);
 });
