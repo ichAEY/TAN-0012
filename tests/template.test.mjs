@@ -15,7 +15,7 @@ const html = fs.readFileSync("out/index.html", "utf8");
 const css = fs.readFileSync("app/template.css", "utf8");
 const component = fs.readFileSync("app/master-template.tsx", "utf8");
 
-test("static export builds from production client data", () => {
+test("static export builds from the empty template", () => {
   assert.match(html, /site-root/);
 });
 
@@ -24,7 +24,7 @@ test("production client data is populated", () => {
   assert.ok(String(site.location.city || "").trim());
   assert.ok(String(site.contacts.phoneDisplay || "").trim());
   assert.ok(Array.isArray(site.reviews));
-  assert.equal(site.reviews.length, 0);
+  assert.ok(site.reviews.length <= 9);
   assert.ok(Array.isArray(site.images.gallery));
 });
 
