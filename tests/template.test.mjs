@@ -39,15 +39,10 @@ test("portfolio and full gallery remain structural with or without client photos
   if (site.images.gallery.length === 0) {
     assert.match(html, /mct-work-placeholder/);
   } else {
-    assert.match(html, new RegExp(site.images.gallery[0].src.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\  if (site.images.gallery.length === 0) {
-    assert.match(html, /mct-work-placeholder/);
-  } else {
-    assert.match(html, /mct-work-image/);
-  }")));
+    assert.ok(html.includes(site.images.gallery[0].src));
   }
   assert.doesNotMatch(html, /disabled=""[^>]*Смотреть все работы/);
 });
-
 test("specialty hero copy is deterministic", () => {
   const hair = {
     template: { specialty: "hair" },
