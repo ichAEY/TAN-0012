@@ -15,7 +15,7 @@ const html = fs.readFileSync("out/index.html", "utf8");
 const css = fs.readFileSync("app/template.css", "utf8");
 const component = fs.readFileSync("app/master-template.tsx", "utf8");
 
-test("static export builds from the empty template", () => {
+test("static export builds from production client data", () => {
   assert.match(html, /site-root/);
 });
 
@@ -24,7 +24,7 @@ test("production client data is populated", () => {
   assert.ok(String(site.location.city || "").trim());
   assert.ok(String(site.contacts.phoneDisplay || "").trim());
   assert.ok(Array.isArray(site.reviews));
-  assert.ok(site.reviews.length <= 9);
+  assert.equal(site.reviews.length, 0);
   assert.ok(Array.isArray(site.images.gallery));
 });
 
@@ -129,9 +129,20 @@ test("approved About copy and skills are deterministic", () => {
   assert.equal(masterInitial(nails), "Н");
 });
 
-test("reviews are capped at nine and rendered without rewriting their text", () => {
+test("reviews are capped at nine and preserve author, source and verbatim text", () => {
   assert.match(component, /site\.reviews as Review\[\]\)\.slice\(0, 9\)/);
+  assert.match(component, /type Review = \{ author: string; text: string; source\?: string \}/);
+  assert.match(component, /review\.source \|\| site\.template\.reviewSource/);
+  assert.match(component, /aria-label="5 из 5">★★★★★/);
   assert.match(component, /<blockquote>«\{review\.text\}»<\/blockquote>/);
+  assert.match(component, /\{reviews\.length > 0 && \(\s*<section className="mct-reviews/);
+});
+
+test("additional block always uses the three compact approved cards", () => {
+  assert.match(component, /title: "Выбор услуги", text: "Мастер поможет определиться\."/);
+  assert.match(component, /title: "Пожелания", text: "Покажите пример результата\."/);
+  assert.match(component, /title: "Перенос записи", text: "Предупредите заранее\."/);
+  assert.doesNotMatch(component, /const amenities = site\.amenities/);
 });
 
 test("approved gallery and service limits cannot regress", () => {
