@@ -39,7 +39,11 @@ test("portfolio and full gallery remain structural with or without client photos
   if (site.images.gallery.length === 0) {
     assert.match(html, /mct-work-placeholder/);
   } else {
+    assert.match(html, new RegExp(site.images.gallery[0].src.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\  if (site.images.gallery.length === 0) {
+    assert.match(html, /mct-work-placeholder/);
+  } else {
     assert.match(html, /mct-work-image/);
+  }")));
   }
   assert.doesNotMatch(html, /disabled=""[^>]*Смотреть все работы/);
 });
