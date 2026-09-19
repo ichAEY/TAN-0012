@@ -15,8 +15,17 @@ const html = fs.readFileSync("out/index.html", "utf8");
 const css = fs.readFileSync("app/template.css", "utf8");
 const component = fs.readFileSync("app/master-template.tsx", "utf8");
 
-test("static export builds for the production site", () => {
+test("static export builds from the empty template", () => {
   assert.match(html, /site-root/);
+});
+
+test("client data is empty in the base template", () => {
+  assert.equal(site.master.name, "");
+  assert.equal(site.location.city, "");
+  assert.equal(site.contacts.phoneDisplay, "");
+  assert.equal(site.reviews.length, 0);
+  assert.equal(site.images.gallery.length, 0);
+  assert.equal(Object.values(site.services).flat().length, 0);
 });
 
 test("the clean template uses one canonical stylesheet and runtime", () => {
@@ -148,19 +157,4 @@ test("Julia booking structure replaces only the mobile block", () => {
   assert.match(component, /mct-visit-details-mobile-julia/);
   assert.match(css, /\.mct-visit-booking-mobile-julia,[\s\S]*?display: none !important/);
   assert.match(css, /@media \(max-width: 767px\)[\s\S]*?\.mct-visit-booking-desktop-current[\s\S]*?display: none !important[\s\S]*?\.mct-visit-booking-mobile-julia[\s\S]*?display: block !important/);
-});
-
-test("TAN-0012 production data is wired through the template", () => {
-  assert.equal(site.master.name, "Наталья");
-  assert.equal(site.brand.name, "Наталья Фадеева");
-  assert.equal(site.template.specialty, "nails");
-  assert.equal(site.master.experienceYears, "14");
-  assert.equal(site.contacts.phoneHref, "tel:+79251631065");
-  assert.equal(site.links.bookingUrl, "");
-  assert.equal(categoryMode(site), "two");
-  assert.equal(site.services.groups[0].services.length, 4);
-  assert.equal(site.services.groups[1].services.length, 2);
-  assert.equal(site.images.gallery.length, 0);
-  assert.match(html, /эксперт по маникюру и педикюру/);
-  assert.match(html, /tel:\+79251631065/);
 });

@@ -22,7 +22,7 @@ jobs:
     outputs:
       pages-ready: ${{ steps.pages-check.outputs.enabled }}
     env:
-      NEXT_PUBLIC_BASE_PATH: /TAN-0012
+      NEXT_PUBLIC_BASE_PATH: /Shablon-For-Only-Masters
     steps:
       - uses: actions/checkout@v5
       - name: Checkout approved Hair decoration source
