@@ -63,6 +63,7 @@ const locationFillsContactRow = Boolean(mapUrl && bookingContacts.length % 2 ===
 
 const beforeAfter = site.images.beforeAfter as unknown[];
 const galleryWorks = site.images.gallery as GalleryItem[];
+const portraitDesktop = (site.images as typeof site.images & { portraitDesktop?: string }).portraitDesktop || site.images.portrait;
 const desktopGalleryModules = [galleryWorks.slice(0, 4), galleryWorks.slice(4, 8), galleryWorks.slice(8)];
 const desktopGallerySetCount = 3;
 const featuredWorks = galleryWorks.slice(0, 7);
@@ -1090,7 +1091,7 @@ export default function MasterTemplate() {
             ) : null}
             <figure className="dct-hero-portrait">
               <picture style={{ display: "block", width: "100%", height: "100%" }}>
-                <source media="(min-width: 768px)" srcSet={site.images.portraitDesktop || site.images.portrait} />
+                <source media="(min-width: 768px)" srcSet={portraitDesktop} />
                 <img src={site.images.portrait} alt={`${site.master.name} — ${site.master.imageAlt}`} />
               </picture>
               <figcaption><span>{site.master.name}</span><small>{translatedText(site.master.heroCaption)}</small></figcaption>
