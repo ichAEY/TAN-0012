@@ -68,7 +68,7 @@ export default {
     "logo": "",
     "portrait": `${publicBase}/placeholder.svg`,
     "about": `${publicBase}/placeholder.svg`,
-    "favicon": `${publicBase}/placeholder.svg`,
+    "favicon": `${publicBase}/favicon-source.png`,
     "heroDecoration": `${publicBase}/assets/template/hair-tools.png`,
     "beforeAfter": [],
     "gallery": []
