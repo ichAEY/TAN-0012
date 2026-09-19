@@ -1,6 +1,6 @@
 # TAN-0012 — sources
 
-Engine: ichAEY/Shablon-For-Only-Masters @ a0180c85526b45e06082a5f7e2def557cb14c8a2
+Engine: ichAEY/Shablon-For-Only-Masters @ 6ecb2722319313ed3c69582b354a71203240f737
 
 Yandex card:
 https://yandex.com/maps/org/master_po_manikyuru_i_pedikyuru_fadeyeva_n_s_/6585606649/
