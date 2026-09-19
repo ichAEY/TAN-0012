@@ -3,30 +3,6 @@ import fs from "node:fs";
 import test from "node:test";
 import site from "../site-data.mjs";
 import { bookingMode, categoryMode, specialtyMode } from "../template-rules.mjs";
-
 const html = fs.readFileSync("out/index.html", "utf8");
-
-test("client static export is built", () => {
-  assert.match(html, /site-root/);
-  assert.match(html, /Наталья Фадеева/);
-});
-
-test("verified client identity and template mode are populated", () => {
-  assert.equal(site.master.name, "Наталья Фадеева");
-  assert.equal(specialtyMode(site), "nails");
-  assert.equal(site.services.groups.length, 2);
-  assert.equal(site.contacts.phoneDisplay, "");
-});
-
-test("service category mode is correct", () => {
-  assert.equal(categoryMode(site), "two");
-});
-
-test("booking mode follows verified data", () => {
-  assert.equal(bookingMode(site), "unavailable");
-});
-
-test("canonical stylesheet and runtime are present", () => {
-  assert.ok(fs.existsSync("app/template.css"));
-  assert.ok(fs.existsSync("public/template-runtime.js"));
-});
+test("fresh Master Engine v2 structure",()=>{assert.match(html,/site-root/);assert.match(html,/id="mobile-portfolio"/);assert.match(html,/Смотреть все работы/);assert.match(html,/mct-work-placeholder/);});
+test("TAN-0012 confirmed data",()=>{assert.equal(site.master.name,"Наталья");assert.equal(site.brand.name,"Наталья Фадеева");assert.equal(site.master.experienceYears,"14");assert.equal(site.contacts.phoneHref,"tel:+79251631065");assert.equal(site.images.gallery.length,0);assert.equal(specialtyMode(site),"nails");assert.equal(categoryMode(site),"two");assert.equal(bookingMode(site),"contact");assert.equal(site.services.groups[0].services.length,4);assert.equal(site.services.groups[1].services.length,2);assert.match(html,/mct-palette-stage/);assert.match(html,/эксперт по маникюру и педикюру/);assert.match(html,/tel:\+79251631065/);});

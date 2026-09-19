@@ -6,10 +6,12 @@ import site from "../site-data.mjs";
 import {
   bookingMode,
   categoryMode,
+  collapsedServiceCounts,
   chooseInitialLocale,
   contactOptions,
   experienceMode,
   hasLogo,
+  heroPreset,
   normalizedLocales,
   serviceBookingUrl,
   specialtyMode,
@@ -52,6 +54,8 @@ const serviceCategoryMode = categoryMode(site);
 const siteBookingMode = bookingMode(site);
 const siteExperienceMode = experienceMode(site);
 const siteSpecialtyMode = specialtyMode(site);
+const siteHeroPreset = heroPreset(site);
+const serviceCollapse = collapsedServiceCounts(site);
 const languages = normalizedLocales(site) as LocaleOption[];
 const bookingContacts = contactOptions(site);
 
@@ -152,6 +156,16 @@ export default function MasterTemplate() {
       : (activeGroup?.services || []).map((service) => ({ ...service, sectionKey: activeGroup?.id }));
   const isCollapsibleCategory = category === "all" && serviceCategoryMode === "many";
   const visibleServices = useMemo(() => services, [services]);
+  const introText = String(site.brand.name || site.master.name || "TANEM").trim();
+  const introTextLengthClass = introText.length > 28 ? " is-very-long" : introText.length > 18 ? " is-long" : "";
+  const serviceCountNoun = (count: number) => {
+    if (locale !== "ru") return translatedText("услуг");
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    if (mod10 === 1 && mod100 !== 11) return "услугу";
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "услуги";
+    return "услуг";
+  };
 
   const baseEnglish: Record<string, string> = {
     "Услуги и цены": "Services & prices",
@@ -163,6 +177,7 @@ export default function MasterTemplate() {
     "Портфолио": "Portfolio",
     "Записаться онлайн": "Book online",
     "Смотреть работы": "View work",
+    "Смотреть все работы": "View all work",
     "Работы": "Work",
     "Открыть галерею": "Open gallery",
     "Выберите услугу": "Choose a service",
@@ -172,6 +187,9 @@ export default function MasterTemplate() {
     "Продолжить": "Continue",
     "Подробнее": "More",
     "Открыть все услуги": "Show all services",
+    "Открыть ещё": "Show",
+    "услугу": "more service",
+    "услуг": "more services",
     "Свернуть услуги": "Collapse services",
     "лет опыта": "years experience",
     "рейтинг": "rating",
@@ -197,6 +215,10 @@ export default function MasterTemplate() {
     "клиенты": "clients",
     "Запишитесь онлайн": "Book online",
     "или свяжитесь любым удобным способом": "or contact us in the way that works for you",
+    "Запишитесь онлайн или свяжитесь любым удобным способом.": "Book online or contact the master in any convenient way.",
+    "эксперт по волосам": "hair expert",
+    "эксперт по маникюру и педикюру": "manicure and pedicure expert",
+    "Стрижки, окрашивание, блонд, уход и укладки с вниманием к состоянию волос, оттенку и вашему образу.": "Haircuts, coloring, blonding, care and styling with attention to hair condition, tone and your look.",
     "По предварительной записи": "By appointment",
     "Написать": "Message",
     "Категории услуг": "Service categories",
@@ -223,15 +245,15 @@ export default function MasterTemplate() {
     if (locale === "en" && baseEnglish[value]) return baseEnglish[value];
     return value;
   };
-  const bookingHref = siteBookingMode === "direct" ? bookingUrl : siteBookingMode === "contact" ? "#booking-options" : "#mobile-location";
+  const bookingHref = siteBookingMode === "direct" ? bookingUrl : "#booking-options";
   const handleBookingClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    if (siteBookingMode === "direct" || siteBookingMode === "unavailable") return;
+    if (siteBookingMode === "direct") return;
     event.preventDefault();
     setBookingOpen(true);
   };
-  const serviceHref = (service: Service) => serviceBookingUrl(service, site) || (siteBookingMode === "contact" ? "#booking-options" : "#mobile-location");
+  const serviceHref = (service: Service) => serviceBookingUrl(service, site) || "#booking-options";
   const handleServiceClick = (event: ReactMouseEvent<HTMLAnchorElement>, service: Service) => {
-    if (serviceBookingUrl(service, site) || siteBookingMode === "unavailable") return;
+    if (serviceBookingUrl(service, site)) return;
     event.preventDefault();
     setBookingOpen(true);
   };
@@ -930,7 +952,7 @@ export default function MasterTemplate() {
           <div className="mct-intro-mark mct-intro-mark-master">
             {hasLogo(site)
               ? <img className="mct-intro-logo-master" src={site.images.logo} alt="" />
-              : <span className="mct-intro-text-master">{site.brand.name || site.master.name || "TANEM"}</span>}
+              : <span className={`mct-intro-text-master${introTextLengthClass}`}>{introText}</span>}
           </div>
         </div>
       )}
@@ -948,6 +970,16 @@ export default function MasterTemplate() {
               <a href="#mobile-location">{translatedText("Визит и запись")}</a>
             </nav>
             <div className="dct-top-actions" aria-label={`Быстрые способы связи с ${site.master.name}`}>
+              {languages.length > 1 ? (
+                <div className="mct-lang-switch is-desktop" role="group" aria-label="Language">
+                  {languages.map((item, index) => (
+                    <span className="mct-lang-item" key={`desktop-${item.code}`}>
+                      {index > 0 ? <span className="mct-lang-sep" aria-hidden="true">/</span> : null}
+                      <button type="button" className={locale === item.code ? "is-active" : ""} aria-pressed={locale === item.code} onClick={() => chooseLocale(item.code)}>{item.label}</button>
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               {bookingContacts.find((item) => item.kind === "phone") ? (
                 <a className="dct-top-phone" href={bookingContacts.find((item) => item.kind === "phone")!.url} aria-label={`Позвонить ${site.master.dative} по номеру ${site.contacts.phoneDisplay}`}>
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 3.5 9.3 8c.2.5.1 1-.3 1.4l-1.4 1.2c1 2.1 2.7 3.8 4.8 4.8l1.2-1.4c.4-.4.9-.5 1.4-.3l4.5 2.2c.5.2.8.8.6 1.4l-.6 2.3c-.2.7-.8 1.1-1.5 1.1C10 20.7 3.3 14 3.3 6c0-.7.4-1.3 1.1-1.5l2.3-.6c.6-.2 1.2.1 1.4.6Z" /></svg>
@@ -963,16 +995,6 @@ export default function MasterTemplate() {
                 <a className="dct-top-icon" href={mapUrl} target="_blank" rel="noopener noreferrer" aria-label={`Открыть адрес ${site.master.genitive} в Яндекс Картах`} title="Яндекс Карты">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
                 </a>
-              ) : null}
-              {languages.length > 1 ? (
-                <div className="mct-lang-switch is-desktop" role="group" aria-label="Language">
-                  {languages.map((item, index) => (
-                    <span className="mct-lang-item" key={`desktop-${item.code}`}>
-                      {index > 0 ? <span className="mct-lang-sep" aria-hidden="true">/</span> : null}
-                      <button type="button" className={locale === item.code ? "is-active" : ""} aria-pressed={locale === item.code} onClick={() => chooseLocale(item.code)}>{item.label}</button>
-                    </span>
-                  ))}
-                </div>
               ) : null}
             </div>
             {languages.length > 1 ? (
@@ -1019,8 +1041,8 @@ export default function MasterTemplate() {
                 </a>
               ) : null}
             </div>
-            <h1>{site.master.name}{site.master.name ? " — " : ""}{translatedText("ваш")} <em>{translatedText(site.master.heroEmphasis)}</em></h1>
-            <p className="mct-hero-copy">{translatedText(site.master.heroCopy)}</p>
+            <h1>{site.master.name}{site.master.name ? " — " : ""}{translatedText("ваш")} <em>{translatedText(siteHeroPreset.emphasis)}</em></h1>
+            <p className="mct-hero-copy">{translatedText(siteHeroPreset.copy)}</p>
           </div>
           <div
             className="mct-hero-visual"
@@ -1118,8 +1140,8 @@ export default function MasterTemplate() {
           </div>
           <div className="mct-hero-bottom">
             <div className="mct-hero-actions">
-              {siteBookingMode !== "unavailable" ? <a className="mct-main-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}>{translatedText("Записаться онлайн")}&nbsp; →</a> : null}
-              {galleryWorks.length > 0 ? <a className="mct-quiet-link" href="#mobile-portfolio">{translatedText("Смотреть работы")} ↓</a> : null}
+              <a className="mct-main-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}>{translatedText("Записаться онлайн")}&nbsp; →</a>
+              <a className="mct-quiet-link" href="#mobile-portfolio">{translatedText("Смотреть все работы")} ↓</a>
             </div>
             <div className={`mct-stats${siteExperienceMode === "unknown" ? " is-two-stats" : ""}`} aria-label="Опыт и рейтинг мастера">
               {siteExperienceMode === "known" ? <div className="mct-stat"><strong>{site.master.experienceYears}</strong><span>{translatedText("лет опыта")}</span></div> : null}
@@ -1130,7 +1152,6 @@ export default function MasterTemplate() {
         </div>
       </header>
 
-      {galleryWorks.length > 0 ? (
       <section className="mct-section" id="mobile-portfolio">
         <div className="mct-shell mct-reveal">
           <div className="mct-section-head">
@@ -1139,11 +1160,13 @@ export default function MasterTemplate() {
           </div>
         </div>
         <div className="mct-shell mct-reveal">
-          <div className="mct-work-grid" aria-label="Подборка работ">
-            {featuredWorks.map((item) => (
+          <div className={`mct-work-grid${galleryWorks.length === 0 ? " is-empty" : ""}`} aria-label="Подборка работ">
+            {featuredWorks.length > 0 ? featuredWorks.map((item) => (
               <button className="mct-work-tile" type="button" key={item.src} onClick={() => openLightbox(item.src)} aria-label={`Открыть фотографию: ${item.alt}`}>
                 <img src={item.src} alt={item.alt} loading="lazy" />
               </button>
+            )) : Array.from({ length: 7 }, (_, index) => (
+              <span className="mct-work-tile mct-work-placeholder" aria-hidden="true" key={`portfolio-placeholder-${index}`} />
             ))}
           </div>
           <div className="dct-film-strip" aria-label={`Бесконечная галерея работ ${site.master.genitive}`}>
@@ -1202,10 +1225,9 @@ export default function MasterTemplate() {
               </div>
             </div>
           </div>
-          <button className="mct-gallery-button" type="button" onClick={() => setGalleryOpen(true)}><span>{translatedText("Открыть галерею")}</span><span aria-hidden="true">→</span></button>
+          <button className="mct-gallery-button" type="button" disabled={galleryWorks.length === 0} aria-disabled={galleryWorks.length === 0} onClick={() => { if (galleryWorks.length > 0) setGalleryOpen(true); }}><span>{translatedText("Смотреть все работы")}</span><span aria-hidden="true">→</span></button>
         </div>
       </section>
-      ) : null}
 
       <section className="mct-prices mct-reveal" id="mobile-prices">
         <div className="mct-shell">
@@ -1378,9 +1400,14 @@ export default function MasterTemplate() {
               );
             })}
           </div>
-          {isCollapsibleCategory && services.length > 6 && (
+          {isCollapsibleCategory && (serviceCollapse.mobileHidden > 0 || serviceCollapse.desktopHidden > 0) && (
             <button className={`mct-more-services${expanded ? " is-open" : ""}`} type="button" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}>
-              {expanded ? translatedText("Свернуть услуги") : translatedText("Открыть все услуги")}
+              {expanded ? translatedText("Свернуть услуги") : (
+                <>
+                  <span className="mct-more-services-mobile-copy">{translatedText("Открыть ещё")} {serviceCollapse.mobileHidden} {serviceCountNoun(serviceCollapse.mobileHidden)}</span>
+                  <span className="mct-more-services-desktop-copy">{translatedText("Открыть ещё")} {serviceCollapse.desktopHidden} {serviceCountNoun(serviceCollapse.desktopHidden)}</span>
+                </>
+              )}
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
           )}
@@ -1525,24 +1552,12 @@ export default function MasterTemplate() {
               ) : null}
             </div>
             {site.master.visitMotto ? <span className="dct-visit-motto" aria-hidden="true">{translatedText(site.master.visitMotto)}</span> : null}
-            {siteBookingMode === "direct" ? (
-              <>
-                <h3>{translatedText("Запишитесь онлайн")}<br /><em>{translatedText("или свяжитесь любым удобным способом")}</em></h3>
-                <p>{translatedText("Выберите свободное время онлайн. Если нужно уточнить услугу, свяжитесь с мастером напрямую.")}</p>
-              </>
-            ) : siteBookingMode === "contact" ? (
-              <>
-                <h3>{translatedText("Свяжитесь удобным способом")}</h3>
-                <p>{translatedText("Позвоните или напишите мастеру, чтобы согласовать услугу и время.")}</p>
-              </>
-            ) : (
-              <>
-                <h3>{translatedText("Локация")}</h3>
-                <p>{translatedText("Адрес и маршрут")}</p>
-              </>
-            )}
+            <h3>{translatedText("Запишитесь онлайн или свяжитесь любым удобным способом.")}</h3>
+            <p>{siteBookingMode === "direct"
+              ? translatedText("Выберите свободное время онлайн. Если нужно уточнить услугу, свяжитесь с мастером напрямую.")
+              : translatedText("Позвоните или напишите мастеру, чтобы согласовать услугу и время.")}</p>
             <div className="mct-visit-actions">
-              {siteBookingMode !== "unavailable" ? <a className="mct-final-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}><span>{siteBookingMode === "direct" ? translatedText("Выбрать время онлайн") : translatedText("Записаться онлайн")}</span><i className="mct-link-arrow" aria-hidden="true" /></a> : null}
+              <a className="mct-final-cta" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick}><span>{siteBookingMode === "direct" ? translatedText("Выбрать время онлайн") : translatedText("Записаться онлайн")}</span><i className="mct-link-arrow" aria-hidden="true" /></a>
               {siteBookingMode === "direct" && site.template.bookingProvider ? <div className="dct-booking-note" aria-hidden="true"><span>▢</span><small>{translatedText("Запись через")} {site.template.bookingProvider}<br />{translatedText("по предварительной записи")}</small></div> : null}
               <div className="mct-final-contact-grid" aria-label={`Способы связи с ${site.master.instrumental}`}>
                 {bookingContacts.map((item) => (
@@ -1569,15 +1584,13 @@ export default function MasterTemplate() {
       </section>
       <a className="mct-tanem-footer" href="https://tanem.ru/" target="_blank" rel="noopener noreferrer"><span className="tanem-mark">T</span><span className="tanem-credit">{translatedText("Создано в")} <strong>TANEM.ru</strong></span></a>
 
-      {siteBookingMode !== "unavailable" ? (
-        <div className={`mct-sticky-wrap${stickyVisible && !galleryOpen && !bookingOpen ? " is-visible" : ""}`} aria-hidden={!stickyVisible || galleryOpen}>
-          <a className="mct-sticky" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick} tabIndex={stickyVisible && !galleryOpen && !bookingOpen ? 0 : -1}>
-            <span className="mct-sticky-icon dct-sticky-mobile-mark">{site.brand.monogram}</span><span className="dct-sticky-live" aria-hidden="true"><i /></span><span className="mct-sticky-copy"><strong>{translatedText("Записаться онлайн")}</strong><small>{siteBookingMode === "direct" ? translatedText("Открыть свободное время") : translatedText("Выберите удобный способ связи")}</small></span><span className="mct-sticky-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-      ) : null}
+      <div className={`mct-sticky-wrap${stickyVisible && !galleryOpen && !bookingOpen ? " is-visible" : ""}`} aria-hidden={!stickyVisible || galleryOpen}>
+        <a className="mct-sticky" href={bookingHref} target={siteBookingMode === "direct" ? "_blank" : undefined} rel={siteBookingMode === "direct" ? "noopener noreferrer" : undefined} onClick={handleBookingClick} tabIndex={stickyVisible && !galleryOpen && !bookingOpen ? 0 : -1}>
+          <span className="mct-sticky-icon dct-sticky-mobile-mark">{site.brand.monogram}</span><span className="dct-sticky-live" aria-hidden="true"><i /></span><span className="mct-sticky-copy"><strong>{translatedText("Записаться онлайн")}</strong><small>{siteBookingMode === "direct" ? translatedText("Открыть свободное время") : translatedText("Выберите удобный способ связи")}</small></span><span className="mct-sticky-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
 
-      {siteBookingMode === "contact" ? <div className={`mct-book-sheet${bookingOpen ? " is-open" : ""}`} id="booking-options" role="dialog" aria-modal="true" aria-hidden={!bookingOpen} aria-label={translatedText("Как вам удобнее записаться?")} onClick={() => setBookingOpen(false)}>
+      <div className={`mct-book-sheet${bookingOpen ? " is-open" : ""}`} id="booking-options" role="dialog" aria-modal="true" aria-hidden={!bookingOpen} aria-label={translatedText("Как вам удобнее записаться?")} onClick={() => setBookingOpen(false)}>
         <div className="mct-book-panel" onClick={(event) => event.stopPropagation()}>
           <button className="mct-book-close" type="button" onClick={() => setBookingOpen(false)} aria-label={translatedText("Закрыть")}>×</button>
           <p className="mct-section-kicker">{translatedText("Запись и связь")}</p>
@@ -1597,7 +1610,7 @@ export default function MasterTemplate() {
             ))}
           </div>
         </div>
-      </div> : null}
+      </div>
 
       {galleryOpen && galleryWorks.length > 0 && (
         <div className="mct-gallery-overlay" role="dialog" aria-modal="true" aria-label={`Галерея ${site.master.genitive}`}>

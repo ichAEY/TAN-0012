@@ -1,14 +1,8 @@
 # TAN-0012 — Наталья Фадеева
 
-Клиентский сайт TANEM, собранный из `Shablon-For-Only-Masters@90708b9597ca4410fc07a2f24694e272a34c074e`.
+Fresh client build from TANEM Master Engine v2.
 
-Состояние:
-- Nails preset;
-- ровно 2 категории — Маникюр / Педикюр;
-- RU + EN;
-- без логотипа и клиентских фотографий;
-- стаж не указан;
-- цены не выдуманы;
-- подтвержденный контакт пока не найден.
-
-Код сайта и проверенные данные уже находятся в репозитории. Публикация/запись намеренно не включается до подтвержденного телефона или прямой ссылки записи.
+Engine commit: `9c96c23115b54eb624b6b5b6771f72885005b15e`
+Source: https://yandex.com/maps/org/master_po_manikyuru_i_pedikyuru_fadeyeva_n_s_/6585606649/
+Booking: by phone +7 (925) 163-10-65
+Photos stay empty until the operator uploads them.
