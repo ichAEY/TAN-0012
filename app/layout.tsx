@@ -22,8 +22,12 @@ export const metadata: Metadata = {
     images: [site.images.portrait],
   },
   icons: {
-    icon: site.images.favicon,
-    shortcut: site.images.favicon,
+    icon: [
+      { url: `${site.basePath}/favicon.ico` },
+      { url: `${site.basePath}/favicon-32x32.png`, type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: `${site.basePath}/favicon.ico`,
+    apple: `${site.basePath}/apple-touch-icon.png`,
   },
 };
 
