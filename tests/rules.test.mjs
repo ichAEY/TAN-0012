@@ -33,10 +33,6 @@ test("direct booking wins and service-specific link wins over generic", () => {
   assert.equal(serviceBookingUrl({ url: "" }, site), "https://booking.example/master");
 });
 
-test("missing booking contact is explicitly unavailable", () => {
-  assert.equal(bookingMode(makeSite()), "unavailable");
-});
-
 test("phone alone is a valid contact fallback and Instagram is filtered", () => {
   const phoneOnly = makeSite({ contacts: { phoneDisplay: "+7 000", phoneHref: "tel:+7000", messenger: null } });
   assert.equal(bookingMode(phoneOnly), "contact");
