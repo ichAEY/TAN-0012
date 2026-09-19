@@ -28,17 +28,9 @@ export default {
     "experienceYears": "14",
     "experienceAria": "14 лет опыта",
     "aboutTitle": "Наталья Фадеева",
-    "aboutLead": "Мастер маникюра и педикюра с 14-летним стажем.",
-    "aboutParagraphs": [
-      "Принимает в Москве на Люблинской улице, 72, корп. 3, на 2 этаже в офисе 19.",
-      "В прайсе есть классический маникюр и педикюр, покрытие гель-лаком, комплексный маникюр и наращивание ногтей."
-    ],
-    "skills": [
-      "Маникюр и покрытие гель-лаком",
-      "Педикюр",
-      "Наращивание ногтей",
-      "Ежедневно 10:00–21:00"
-    ]
+    "aboutLead": "",
+    "aboutParagraphs": [],
+    "skills": []
   },
   "location": {
     "country": "Россия",
@@ -158,21 +150,23 @@ export default {
         "Мастер маникюра и педикюра": "Manicure and pedicure specialist",
         "Маникюр, педикюр, покрытие и наращивание ногтей с вниманием к аккуратности и комфорту.": "Manicure, pedicure, gel polish and nail extensions with attention to precision and comfort.",
         "Наталья Фадеева": "Natalia Fadeeva",
-        "Мастер маникюра и педикюра с 14-летним стажем.": "Manicure and pedicure specialist with 14 years of experience.",
-        "Принимает в Москве на Люблинской улице, 72, корп. 3, на 2 этаже в офисе 19.": "Appointments in Moscow at 72 Bldg. 3 Lyublinskaya Street, floor 2, office 19.",
-        "В прайсе есть классический маникюр и педикюр, покрытие гель-лаком, комплексный маникюр и наращивание ногтей.": "The price list includes classic manicure and pedicure, gel polish, a manicure package and nail extensions.",
-        "Маникюр и покрытие гель-лаком": "Manicure and gel polish",
-        "Педикюр": "Pedicure",
-        "Наращивание ногтей": "Nail extensions",
-        "Ежедневно 10:00–21:00": "Daily 10:00–21:00",
+        "Я Наталья — эксперт по маникюру и педикюру со стажем более 14 лет.": "I am Natalia — a manicure and pedicure expert with over 14 years of experience.",
+        "Выполняю маникюр и педикюр, наращивание и коррекцию ногтей.": "I provide manicure and pedicure, nail extensions and corrections.",
+        "Работаю со стерильными инструментами и уделяю внимание аккуратности, форме и качеству результата.": "I work with sterile instruments and pay close attention to precision, shape and the quality of the result.",
+        "Маникюр и педикюр": "Manicure and pedicure",
+        "Наращивание и коррекция": "Extensions and corrections",
+        "Стерильные инструменты": "Sterile instruments",
         "Россия": "Russia",
         "Москва": "Moscow",
         "Люблинская улица, 72, корп. 3, этаж 2, офис 19, 109382": "72 Bldg. 3 Lyublinskaya Street, floor 2, office 19, Moscow, 109382",
+        "Ежедневно 10:00–21:00": "Daily 10:00–21:00",
         "Маникюр": "Manicure",
         "Маникюр с покрытием, гель-лак": "Manicure with gel polish",
         "Маникюр, комплекс": "Manicure package",
         "Классический маникюр": "Classic manicure",
+        "Наращивание ногтей": "Nail extensions",
         "Длина до 3-ки.": "Length up to size 3.",
+        "Педикюр": "Pedicure",
         "Педикюр с покрытием, гель-лак": "Pedicure with gel polish",
         "Классический педикюр": "Classic pedicure"
       }

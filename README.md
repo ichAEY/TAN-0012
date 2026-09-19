@@ -1,8 +1,5 @@
-# TAN-0012 — Наталья Фадеева
+# TAN-0012
 
-Fresh client build from TANEM Master Engine v2.
+Production site rebuilt from `ichAEY/Shablon-For-Only-Masters` at `a7817f44353bcaf29a86a33692c8c09c00d45078`.
 
-Engine commit: `9c96c23115b54eb624b6b5b6771f72885005b15e`
-Source: https://yandex.com/maps/org/master_po_manikyuru_i_pedikyuru_fadeyeva_n_s_/6585606649/
-Booking: by phone +7 (925) 163-10-65
-Photos stay empty until the operator uploads them.
+Client-specific facts live only in `site-data.mjs` and `SOURCES.md`.
