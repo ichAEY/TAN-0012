@@ -149,6 +149,13 @@ test("reviews keep separate approved mobile and desktop renderers", () => {
   assert.match(css, /@media \(min-width: 1024px\)[\s\S]*?\.dct-review-card\s*\{\s*display:\s*flex !important;/);
 });
 
+test("mobile review experiment mirrors desktop card architecture", () => {
+  assert.match(component, /mct-review-card mct-review-card-mobile[\s\S]*?dct-review-card-head/);
+  assert.match(css, /TAN-0012 mobile review architecture experiment/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?-webkit-line-clamp:\s*6 !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?height:\s*238px !important/);
+});
+
 test("additional block always uses the three compact approved cards", () => {
   assert.match(component, /title: "Выбор услуги", text: "Мастер поможет определиться\."/);
   assert.match(component, /title: "Пожелания", text: "Покажите пример результата\."/);

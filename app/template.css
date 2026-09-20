@@ -12749,3 +12749,80 @@ html body .mct-map-wrap > a::after {
     font: 600 10px/1.4 "Manrope", Arial, sans-serif;
   }
 }
+
+
+/* TAN-0012 mobile review architecture experiment */
+@media (max-width: 767px) {
+  .mct-review-card-mobile,
+  .mct-review-card-mobile.is-long {
+    display: flex !important;
+    height: 238px !important;
+    min-height: 238px !important;
+    max-height: 238px !important;
+    flex-direction: column !important;
+    padding: 16px 16px 14px !important;
+    overflow: hidden !important;
+  }
+
+  .mct-review-card-mobile .dct-review-card-head {
+    display: flex !important;
+    min-height: 28px !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+  }
+
+  .mct-review-card-mobile .dct-review-card-head > strong {
+    min-width: 0 !important;
+    color: #332d2a !important;
+    font-family: "Manrope", Arial, sans-serif !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+
+  .mct-review-card-mobile .dct-review-card-head > strong small {
+    margin-left: 4px !important;
+    color: #857871 !important;
+    font-family: "Manrope", Arial, sans-serif !important;
+    font-size: 8.5px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+
+  .mct-review-card-mobile .dct-review-card-head > span {
+    flex: 0 0 auto !important;
+    color: #8a6659 !important;
+    font-size: 10px !important;
+    letter-spacing: .08em !important;
+  }
+
+  .mct-review-card-mobile blockquote,
+  .mct-review-card-mobile.is-long blockquote {
+    display: -webkit-box !important;
+    margin: 13px 0 0 !important;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 6 !important;
+    max-height: 6.72em !important;
+  }
+
+  .mct-review-card-mobile i,
+  .mct-review-card-mobile.is-long i,
+  .mct-review-card-mobile:not(.is-long) i {
+    position: static !important;
+    display: inline-flex !important;
+    align-self: flex-start !important;
+    margin-top: auto !important;
+    padding-top: 8px !important;
+    color: #76594f !important;
+    font-family: "Manrope", Arial, sans-serif !important;
+    font-size: 9px !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+  }
+
+  .mct-review-card-mobile.is-long i::after {
+    content: none !important;
+  }
+}

@@ -1562,9 +1562,11 @@ export default function MasterTemplate() {
                             reviewWasDraggedRef.current = false;
                           }}
                         >
-                          <span aria-label="5 из 5">★★★★★</span>
+                          <div className="dct-review-card-head">
+                            <strong>{review.author} <small>{review.source || site.template.reviewSource}</small></strong>
+                            <span aria-label="5 из 5">★★★★★</span>
+                          </div>
                           <blockquote>«{review.text}»</blockquote>
-                          <small>{review.author} · {review.source || site.template.reviewSource}</small>
                           <i>{translatedText("Подробнее")} →</i>
                         </a>
 
