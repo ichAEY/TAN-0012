@@ -154,7 +154,10 @@ test("mobile review experiment mirrors desktop card architecture", () => {
   assert.match(component, /<blockquote>\{review\.text\}<\/blockquote>/);
   assert.match(css, /TAN-0012 mobile review architecture experiment/);
   assert.match(css, /mct-review-card-mobile[\s\S]*?-webkit-line-clamp:\s*7 !important/);
-  assert.match(css, /mct-review-card-mobile[\s\S]*?align-self:\s*flex-end !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?padding:\s*16px 16px 40px !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?max-height:\s*144px !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?position:\s*absolute !important[\s\S]*?bottom:\s*15px !important/);
+  assert.match(css, /mct-mobile-review-source[\s\S]*?translateY\(4px\)/);
   assert.match(css, /mct-review-card-mobile[\s\S]*?font-size:\s*9\.6px !important/);
 });
 
