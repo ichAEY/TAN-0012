@@ -1562,11 +1562,11 @@ export default function MasterTemplate() {
                             reviewWasDraggedRef.current = false;
                           }}
                         >
-                          <div className="dct-review-card-head">
-                            <strong>{review.author} <small>{review.source || site.template.reviewSource}</small></strong>
-                            <span aria-label="5 из 5">★★★★★</span>
+                          <div className="dct-review-card-head mct-mobile-review-head">
+                            <strong><span className="mct-mobile-review-name">{review.author}</span><span className="mct-mobile-review-stars" aria-label="5 из 5">★★★★★</span></strong>
+                            <small className="mct-mobile-review-source">{review.source || site.template.reviewSource}</small>
                           </div>
-                          <blockquote>«{review.text}»</blockquote>
+                          <blockquote>{review.text}</blockquote>
                           <i>{translatedText("Подробнее")} →</i>
                         </a>
 
@@ -1575,7 +1575,7 @@ export default function MasterTemplate() {
                             <strong>{review.author} <small>{review.source || site.template.reviewSource}</small></strong>
                             <span aria-label="5 из 5">★★★★★</span>
                           </div>
-                          <blockquote>«{review.text}»</blockquote>
+                          <blockquote>{review.text}</blockquote>
                           {reviewIsLong && (
                             <a
                               className="dct-review-continue"

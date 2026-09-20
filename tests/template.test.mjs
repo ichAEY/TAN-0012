@@ -137,7 +137,7 @@ test("reviews are capped at nine and preserve author, source and verbatim text",
   assert.match(component, /type Review = \{ author: string; text: string; source\?: string \}/);
   assert.match(component, /review\.source \|\| site\.template\.reviewSource/);
   assert.match(component, /aria-label="5 из 5">★★★★★/);
-  assert.match(component, /<blockquote>«\{review\.text\}»<\/blockquote>/);
+  assert.match(component, /<blockquote>\{review\.text\}<\/blockquote>/);
   assert.match(component, /\{reviews\.length > 0 && \(\s*<section className="mct-reviews/);
 });
 
@@ -150,10 +150,12 @@ test("reviews keep separate approved mobile and desktop renderers", () => {
 });
 
 test("mobile review experiment mirrors desktop card architecture", () => {
-  assert.match(component, /mct-review-card mct-review-card-mobile[\s\S]*?dct-review-card-head/);
+  assert.match(component, /mct-review-card mct-review-card-mobile[\s\S]*?mct-mobile-review-stars[\s\S]*?mct-mobile-review-source/);
+  assert.match(component, /<blockquote>\{review\.text\}<\/blockquote>/);
   assert.match(css, /TAN-0012 mobile review architecture experiment/);
-  assert.match(css, /mct-review-card-mobile[\s\S]*?-webkit-line-clamp:\s*6 !important/);
-  assert.match(css, /mct-review-card-mobile[\s\S]*?height:\s*238px !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?-webkit-line-clamp:\s*7 !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?align-self:\s*flex-end !important/);
+  assert.match(css, /mct-review-card-mobile[\s\S]*?font-size:\s*9\.6px !important/);
 });
 
 test("additional block always uses the three compact approved cards", () => {
